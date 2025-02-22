@@ -63,7 +63,7 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {photos.map((photo, index) => (
           <div
-            key={photo.id}
+            key={photo.id + '_' + index}
             ref={index === photos.length - 1 ? lastPhotoRef : undefined}
           >
             <Link 
