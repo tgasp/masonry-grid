@@ -32,7 +32,7 @@ export default function Photo() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -43,7 +43,7 @@ export default function Photo() {
         <p className="text-red-600 mb-4">{error || 'Photo not found'}</p>
         <button
           onClick={() => navigate('/')}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover transition-colors"
         >
           Back to Gallery
         </button>
@@ -55,7 +55,7 @@ export default function Photo() {
     <div>
       <Link
         to="/"
-        className="inline-flex items-center mb-6 text-sm font-medium text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center mb-6 text-sm font-medium text-gray-900 hover:text-primary transition-colors"
       >
         <svg
           className="mr-2 h-5 w-5"
@@ -84,8 +84,8 @@ export default function Photo() {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             Photo by {photo.photographer}
           </h1>
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-            <p>
+          <div className="flex flex-wrap gap-4 text-sm">
+            <p className="text-gray-900">
               <span className="font-medium">Dimensions:</span>{' '}
               {photo.width} × {photo.height}
             </p>
@@ -93,7 +93,7 @@ export default function Photo() {
               href={photo.photographer_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-primary hover:text-primary-hover transition-colors"
             >
               View photographer's profile
             </a>
@@ -101,7 +101,7 @@ export default function Photo() {
               href={photo.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-primary hover:text-primary-hover transition-colors"
             >
               View on Pexels
             </a>

@@ -9,14 +9,14 @@ export default function Layout() {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <Link to="/" className="text-xl font-bold text-gray-800">
+                <Link to="/" className="text-xl font-bold text-gray-900">
                   Photo Gallery
                 </Link>
               </div>
               <div className="ml-6 flex space-x-8">
                 <Link
                   to="/"
-                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-primary"
                 >
                   Home
                 </Link>
