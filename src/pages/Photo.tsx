@@ -52,7 +52,7 @@ export default function Photo() {
   }
 
   return (
-    <div>
+    <div className='md:container'>
       <Link
         to="/"
         className="inline-flex items-center mb-6 text-sm font-medium text-gray-900 hover:text-primary transition-colors"

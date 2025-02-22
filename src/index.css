@@ -11,7 +11,7 @@
   }
 
   body {
-    @apply m-0 flex min-h-screen min-w-[320px] place-items-center bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text;
+    @apply m-0 min-h-screen min-w-[320px] bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text;
   }
 
   a {
