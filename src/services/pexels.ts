@@ -1,13 +1,12 @@
-import axios from 'axios';
-import { PexelsPhoto, PexelsResponse } from '../types/pexels';
+import { PexelsResponse, PexelsPhoto, PhotoService } from '@/types/pexels';
+import { ApiClient } from '@/services/api';
 
-class PexelsService {
-  private client;
-  private baseURL = 'https://api.pexels.com/v1';
+class PexelsService implements PhotoService {
+  private client: ApiClient;
 
   constructor() {
-    this.client = axios.create({
-      baseURL: this.baseURL,
+    this.client = new ApiClient({
+      baseURL: 'https://api.pexels.com/v1',
       headers: {
         Authorization: import.meta.env.VITE_PEXELS_API_KEY,
       },
@@ -16,13 +15,10 @@ class PexelsService {
 
   async getCuratedPhotos(page: number = 1, perPage: number = 30): Promise<PexelsResponse> {
     try {
-      const response = await this.client.get<PexelsResponse>('/curated', {
-        params: {
-          page,
-          per_page: perPage,
-        },
+      return await this.client.fetchWithError<PexelsResponse>('/curated', {
+        page,
+        per_page: perPage,
       });
-      return response.data;
     } catch (error) {
       console.error('Error fetching curated photos:', error);
       throw error;
@@ -31,24 +27,20 @@ class PexelsService {
 
   async searchPhotos(query: string, page: number = 1, perPage: number = 30): Promise<PexelsResponse> {
     try {
-      const response = await this.client.get<PexelsResponse>('/search', {
-        params: {
-          query,
-          page,
-          per_page: perPage,
-        },
+      return await this.client.fetchWithError<PexelsResponse>('/search', {
+        query,
+        page,
+        per_page: perPage,
       });
-      return response.data;
     } catch (error) {
       console.error('Error searching photos:', error);
       throw error;
     }
   }
 
-  async getPhotoById(id: number): Promise<PexelsPhoto> {
+  async getPhotoById(id: string): Promise<PexelsPhoto> {
     try {
-      const response = await this.client.get<PexelsPhoto>(`/photos/${id}`);
-      return response.data;
+      return await this.client.fetchWithError<PexelsPhoto>(`/photos/${parseInt(id)}`);
     } catch (error) {
       console.error('Error fetching photo by id:', error);
       throw error;

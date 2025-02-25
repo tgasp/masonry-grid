@@ -1,58 +1,58 @@
-import { useEffect, useState } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import { pexelsService } from '../services/pexels'
-import type { PexelsPhoto } from '../types/pexels'
+import { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { pexelsService } from "../services/pexels";
+import type { PexelsPhoto } from "../types/pexels";
 
 export default function Photo() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [photo, setPhoto] = useState<PexelsPhoto | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [photo, setPhoto] = useState<PexelsPhoto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadPhoto = async () => {
-      if (!id) return
+      if (!id) return;
       try {
-        setLoading(true)
-        setError('')
-        const photoData = await pexelsService.getPhotoById(Number(id))
-        setPhoto(photoData)
+        setLoading(true);
+        setError("");
+        const photoData = await pexelsService.getPhotoById(id);
+        setPhoto(photoData);
       } catch (err) {
-        setError('Failed to load photo. Please try again later.')
-        console.error('Error loading photo:', err)
+        setError("Failed to load photo. Please try again later.");
+        console.error("Error loading photo:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    loadPhoto()
-  }, [id])
+    loadPhoto();
+  }, [id]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
-    )
+    );
   }
 
   if (error || !photo) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 mb-4">{error || 'Photo not found'}</p>
+        <p className="text-red-600 mb-4">{error || "Photo not found"}</p>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover transition-colors"
         >
           Back to Gallery
         </button>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='md:container'>
+    <div className="md:container">
       <Link
         to="/"
         className="inline-flex items-center mb-6 text-sm font-medium text-gray-900 hover:text-primary transition-colors"
@@ -86,8 +86,8 @@ export default function Photo() {
           </h1>
           <div className="flex flex-wrap gap-4 text-sm">
             <p className="text-gray-900">
-              <span className="font-medium">Dimensions:</span>{' '}
-              {photo.width} × {photo.height}
+              <span className="font-medium">Dimensions:</span> {photo.width} ×{" "}
+              {photo.height}
             </p>
             <a
               href={photo.photographer_url}
@@ -109,5 +109,5 @@ export default function Photo() {
         </div>
       </div>
     </div>
-  )
+  );
 }
