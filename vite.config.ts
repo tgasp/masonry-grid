@@ -1,18 +1,24 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+/// <reference types="vitest" />
+import { defineConfig, mergeConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { defineConfig as defineVitestConfig } from 'vitest/config'
 
-// https://vitejs.dev/config/
-export default defineConfig({
+const viteConfig = defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': '/src',
-      '@components': '/src/components',
-      '@styles': '/src/styles',
-      '@hooks': '/src/hooks',
-      '@services': '/src/services',
-      '@pages': '/src/pages',
-      '@utils': '/src/utils',
+      '@': '/src'
     },
   },
-});
+})
+
+const vitestConfig = defineVitestConfig({
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    css: true,
+  },
+})
+
+export default mergeConfig(viteConfig, vitestConfig)

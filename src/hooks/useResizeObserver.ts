@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
  * @param callback - Function to call when the element resizes
  */
 export function useResizeObserver<T extends HTMLElement>(
-  target: React.RefObject<T>,
+  target: React.RefObject<T | null>,
   callback: (entry: ResizeObserverEntry) => void
 ): void {
   const observerRef = useRef<ResizeObserver | null>(null);

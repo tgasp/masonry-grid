@@ -1,6 +1,7 @@
 # Masonry Grid
 
-A responsive photo gallery built with React and TypeScript that shows photos from Pexels API in a masonry layout.
+> **NOTE:** I used AI-powered development tools including GitHub Copilot, Claude AI, and ChatGPT for various 
+> aspects of development such as unit testing, documentation and etc.
 
 ## Live Demo
 
@@ -75,3 +76,4 @@ I organized the code for maintainability:
 - Added proper error boundaries for resilience
 
 The result is a fast, responsive photo gallery that handles large datasets smoothly while providing a great user experience.
+
