@@ -44,7 +44,7 @@ export default function Photo() {
   }
 
   return (
-    <div className="md:container">
+    <div className="md:container px-4">
       <Link
         to="/"
         className="inline-flex items-center mb-6 text-sm font-medium text-gray-900 hover:text-primary transition-colors"
@@ -65,13 +65,14 @@ export default function Photo() {
       </Link>
 
       <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-        <div className="relative max-h-[80vh] overflow-hidden">
-          <img
-            src={photo.src.large2x}
-            alt={photo.alt || `Photo by ${photo.photographer}`}
-            className="w-full h-auto object-contain"
-          />
-        </div>
+        <img
+          src={photo.src.large2x}
+          alt={photo.alt || `Photo by ${photo.photographer}`}
+          className={`min-h-[300px] max-h-[70vh]`}
+          style={{
+            background: photo.avg_color,
+          }}
+        />
         <div className="p-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             Photo by {photo.photographer}
