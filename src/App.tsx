@@ -4,11 +4,26 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoadingFallback from "./components/LoadingFallback";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
+// Create a new QueryClient with optimized settings
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
-// Lazy load components
+// Lazy load components with prefetch
 const Layout = lazy(() => import("./components/Layout"));
-const Home = lazy(() => import("./pages/Home"));
+const Home = lazy(() =>
+  import("./pages/Home").then((module) => {
+    // Prefetch the photo detail page component
+    import("./pages/Photo");
+    return module;
+  })
+);
 const Photo = lazy(() => import("./pages/Photo"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 

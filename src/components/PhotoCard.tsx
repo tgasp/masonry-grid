@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useInView } from "@/hooks/useInView";
@@ -10,6 +10,7 @@ interface PhotoCardProps {
 
 const CardWrapper = styled.div`
   margin-bottom: 20px;
+  width: 100%;
 `;
 
 const ImageContainer = styled.div<{ $aspectRatio: number; $bgColor: string }>`
@@ -26,7 +27,9 @@ const Image = styled.img<{ $imageLoaded: boolean }>`
   left: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   opacity: ${(props) => (props.$imageLoaded ? 1 : 0)};
+  transition: opacity 0.3s ease;
 `;
 
 const PhotoInfo = styled.div<{ $isLoaded: boolean }>`
@@ -54,9 +57,13 @@ const Photographer = styled.p`
   margin: 0;
 `;
 
-export default function PhotoCard({ photo }: PhotoCardProps) {
+// Using React.memo to prevent unnecessary re-renders
+const PhotoCard = memo(function PhotoCard({ photo }: PhotoCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [ref, isInView] = useInView<HTMLDivElement>({ once: true });
+  const [ref, isInView] = useInView<HTMLDivElement>({
+    once: true,
+    rootMargin: "200px", // Load images earlier for smoother experience
+  });
   const aspectRatio = photo.width / photo.height;
 
   return (
@@ -66,9 +73,14 @@ export default function PhotoCard({ photo }: PhotoCardProps) {
           {isInView && (
             <Image
               src={photo.src.medium}
+              srcSet={`${photo.src.small} 400w, ${photo.src.medium} 800w, ${photo.src.large} 1200w`}
+              sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
               alt={photo.alt || `Photo by ${photo.photographer}`}
               onLoad={() => setImageLoaded(true)}
               $imageLoaded={imageLoaded}
+              loading="lazy"
+              width={photo.width}
+              height={photo.height}
             />
           )}
 
@@ -79,4 +91,6 @@ export default function PhotoCard({ photo }: PhotoCardProps) {
       </Link>
     </CardWrapper>
   );
-}
+});
+
+export default PhotoCard;
