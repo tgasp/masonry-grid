@@ -1,6 +1,6 @@
 import { useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { PexelsPhoto } from "@/types/pexels";
+import PhotoCard from "./PhotoCard";
 
 interface MasonryGridProps {
   photos: PexelsPhoto[];
@@ -32,25 +32,11 @@ export default function MasonryGrid({ photos, loading, hasMore, onIntersect }: M
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {photos.map((photo, index) => (
-          <div
+          <PhotoCard
             key={photo.id + "" + index}
-            ref={index === photos.length - 1 ? lastPhotoRef : undefined}
-          >
-            <Link to={`/photo/${photo.id}`} className="block group">
-              <div className="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-200">
-                <img
-                  src={photo.src.medium}
-                  alt={photo.alt || `Photo by ${photo.photographer}`}
-                  className="object-cover w-full h-full transition-transform duration-200 group-hover:scale-105"
-                />
-              </div>
-              <div className="mt-2">
-                <p className="text-sm text-gray-900 truncate">
-                  Photo by {photo.photographer}
-                </p>
-              </div>
-            </Link>
-          </div>
+            photo={photo}
+            innerRef={index === photos.length - 1 ? lastPhotoRef : undefined}
+          />
         ))}
       </div>
 

@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoadingFallback from "./components/LoadingFallback";
-import RouteErrorBoundary from "./components/RouteErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -20,11 +19,7 @@ function App() {
         <BrowserRouter>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
-              <Route
-                path="/"
-                element={<Layout />}
-                errorElement={<RouteErrorBoundary />}
-              >
+              <Route path="/" element={<Layout />}>
                 <Route
                   index
                   element={
@@ -32,7 +27,6 @@ function App() {
                       <Home />
                     </Suspense>
                   }
-                  errorElement={<RouteErrorBoundary />}
                 />
                 <Route
                   path="photo/:id"
@@ -41,7 +35,6 @@ function App() {
                       <Photo />
                     </Suspense>
                   }
-                  errorElement={<RouteErrorBoundary />}
                 />
                 {/* Catch-all route for 404 */}
                 <Route
