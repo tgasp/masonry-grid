@@ -34,12 +34,10 @@ export function usePhotos(
   useEffect(() => {
     const loadedPhotos = response?.photos || [];
 
-    setPhotos(prev => [...prev, ...loadedPhotos])
-  }, [response]);
+    setPhotos(prev => params.page === 1 ? loadedPhotos : [...prev, ...loadedPhotos])
+  }, [response, params]);
 
   const setSearch = (q: string) => {
-    setPhotos([]);
-
     setParams(prev => ({
       ...prev,
       search: q,
@@ -47,7 +45,7 @@ export function usePhotos(
     }));
   };
 
-  const hasMore = Boolean(response?.next_page);
+  const hasMore = Boolean(response?.next_page || loading);
 
   // Function to load more photos
   const loadMore = useCallback(async () => {

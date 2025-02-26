@@ -1,13 +1,35 @@
 import { useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+
 import { usePhotos } from "@/hooks/usePhotos";
+import SearchBar from "@/components/SearchBar";
 
 export default function Home() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const observer = useRef<IntersectionObserver | null>(null);
+  const initialSearch = searchParams.get("q") || "";
 
-  const { photos, loadMore, hasMore, loading, error } = usePhotos();
+  const { photos, loadMore, hasMore, loading, error, setSearch } = usePhotos(
+    1,
+    30,
+    initialSearch
+  );
 
-  console.log(photos);
+  const handleOnSearch = (q: string) => {
+    setSearchParams((params) => {
+      if (q) {
+        params.set("q", q);
+      } else {
+        params.delete("q");
+      }
+
+      return params;
+    });
+
+    setSearch(q);
+  };
+
   const lastPhotoRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading) return;
@@ -26,13 +48,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8 text-gray-900">Photo Gallery</h1>
-
-      {/* <PhotoFilter
-        onFilterChange={handleFilterChange}
-        onError={setError}
-        onLoadingChange={setLoading}
-      /> */}
+      <SearchBar onSearch={handleOnSearch} initialValue={initialSearch} />
 
       {error && !photos.length && (
         <div className="text-center py-12">

@@ -1,18 +1,23 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from "react";
 
 interface SearchBarProps {
-  onSearch: (query: string) => void
-  initialValue?: string
+  onSearch: (query: string) => void;
+  initialValue?: string;
 }
 
-export default function SearchBar({ onSearch, initialValue = '' }: SearchBarProps) {
-  const [searchQuery, setSearchQuery] = useState(initialValue)
+export default function SearchBar({
+  onSearch,
+  initialValue = "",
+}: SearchBarProps) {
+  const [searchQuery, setSearchQuery] = useState(initialValue);
 
   const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    onSearch(searchQuery.trim())
-  }
+    e.preventDefault();
 
+    const q = searchQuery.trim() || "";
+
+    onSearch(q);
+  };
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto mb-8">
       <div className="relative">
@@ -45,5 +50,5 @@ export default function SearchBar({ onSearch, initialValue = '' }: SearchBarProp
         </button>
       </div>
     </form>
-  )
+  );
 }
