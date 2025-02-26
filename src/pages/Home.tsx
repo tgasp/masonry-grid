@@ -1,46 +1,13 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { pexelsService } from "../services/pexels";
-import type { PexelsPhoto, PexelsResponse } from "../types/pexels";
-import PhotoFilter, { usePhotoFilter } from "../components/PhotoFilter";
+import { usePhotos } from "@/hooks/usePhotos";
 
 export default function Home() {
-  const [photos, setPhotos] = useState<PexelsPhoto[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
-  const { hasMore, loadMorePhotos, resetFilter } = usePhotoFilter();
 
-  const loadPhotos = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const response = await pexelsService.getCuratedPhotos(1);
-      setPhotos(response.photos);
-    } catch (err) {
-      console.error("Error loading photos:", err);
-      setError("Failed to load photos. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { photos, loadMore, hasMore, loading, error } = usePhotos();
 
-  const handleFilterChange = (response: PexelsResponse) => {
-    setPhotos(response.photos);
-  };
-
-  const handleLoadMore = useCallback(async () => {
-    try {
-      const response = await loadMorePhotos();
-      if (response) {
-        setPhotos((prev) => [...prev, ...response.photos]);
-      }
-    } catch (err) {
-      console.error("Error loading more photos:", err);
-      setError("Failed to load more photos");
-    }
-  }, [loadMorePhotos]);
-
+  console.log(photos);
   const lastPhotoRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading) return;
@@ -48,36 +15,31 @@ export default function Home() {
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          handleLoadMore();
+          loadMore();
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore, handleLoadMore]
+    [loading, hasMore, loadMore]
   );
-
-  useEffect(() => {
-    loadPhotos();
-  }, [loadPhotos]);
 
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 text-gray-900">Photo Gallery</h1>
 
-      <PhotoFilter
+      {/* <PhotoFilter
         onFilterChange={handleFilterChange}
         onError={setError}
         onLoadingChange={setLoading}
-      />
+      /> */}
 
       {error && !photos.length && (
         <div className="text-center py-12">
-          <p className="text-red-600">{error}</p>
+          <p className="text-red-600">{error.message}</p>
           <button
             onClick={() => {
-              resetFilter();
-              loadPhotos();
+              loadMore();
             }}
             className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover transition-colors"
           >
@@ -89,7 +51,7 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {photos.map((photo, index) => (
           <div
-            key={photo.id}
+            key={photo.id + "" + index}
             ref={index === photos.length - 1 ? lastPhotoRef : undefined}
           >
             <Link to={`/photo/${photo.id}`} className="block group">

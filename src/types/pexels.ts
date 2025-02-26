@@ -28,9 +28,3 @@ export interface PexelsResponse {
   photos: PexelsPhoto[];
   next_page: string;
 }
-
-export interface PhotoService {
-  getCuratedPhotos(page?: number, perPage?: number): Promise<PexelsResponse>;
-  searchPhotos(query: string, page?: number, perPage?: number): Promise<PexelsResponse>;
-  getPhotoById(id: string): Promise<PexelsPhoto>;
-}

@@ -1,7 +1,7 @@
-import { PexelsResponse, PexelsPhoto, PhotoService } from '@/types/pexels';
+import { PexelsResponse, PexelsPhoto } from '@/types/pexels';
 import { ApiClient } from '@/services/api';
 
-class PexelsService implements PhotoService {
+class PexelsService {
   private client: ApiClient;
 
   constructor() {
@@ -25,7 +25,7 @@ class PexelsService implements PhotoService {
     }
   }
 
-  async searchPhotos(query: string, page: number = 1, perPage: number = 30): Promise<PexelsResponse> {
+  async searchPhotos(page: number = 1, perPage: number = 30, query: string): Promise<PexelsResponse> {
     try {
       return await this.client.fetchWithError<PexelsResponse>('/search', {
         query,
@@ -36,6 +36,10 @@ class PexelsService implements PhotoService {
       console.error('Error searching photos:', error);
       throw error;
     }
+  }
+
+  async getPhotos(page: number = 1, perPage: number = 30, query: string = ''): Promise<PexelsResponse> {
+    return query ? this.searchPhotos(page, perPage, query) : this.getCuratedPhotos(page, perPage);
   }
 
   async getPhotoById(id: string): Promise<PexelsPhoto> {
