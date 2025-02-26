@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useResizeObserver } from '../../../hooks/useResizeObserver';
 import { 
   UseMasonryGridOptions, 
   UseMasonryGridResult 
@@ -101,27 +102,34 @@ export function useMasonryGrid({
     }
   }, [containerHeight, loading, hasMore, onIntersect]);
   
-  // Handle resize events
-  const handleResize = useCallback(() => {
-    if (!containerRef.current) return;
-    
-    setContainerWidth(containerRef.current.clientWidth);
-    setVisibleHeight(window.innerHeight);
+  // Create a stable callback for the resize observer
+  const handleResize = useCallback((entry: ResizeObserverEntry) => {
+    setContainerWidth(entry.contentRect.width);
   }, []);
   
-  // Setup event listeners
+  // Use the custom resize observer hook to track container size changes
+  useResizeObserver(containerRef as React.RefObject<HTMLElement>, handleResize);
+  
+  // Setup scroll event listener
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
     
-    // Initial measurements
-    handleResize();
+    // Initial measurement for container width if container exists
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.clientWidth);
+    }
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
     };
-  }, [handleScroll, handleResize]);
+  }, [handleScroll]);
+  
+  // We still need to update visibleHeight when window size changes
+  useEffect(() => {
+    const updateVisibleHeight = () => setVisibleHeight(window.innerHeight);
+    window.addEventListener('resize', updateVisibleHeight);
+    return () => window.removeEventListener('resize', updateVisibleHeight);
+  }, []);
 
   return {
     containerRef,
