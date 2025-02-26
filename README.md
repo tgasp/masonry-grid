@@ -1,4 +1,4 @@
-# Pexels Photo Gallery
+# Masonry Grid
 
 A responsive photo gallery built with React and TypeScript that shows photos from Pexels API in a masonry layout.
 
@@ -40,6 +40,8 @@ I built a custom virtualization solution that only renders photos visible in the
 
 This approach is much more efficient than libraries that render everything at once.
 
+https://github.com/user-attachments/assets/06a712bb-34ae-4713-9cd3-6de43811a08c
+
 ### Image Loading
 
 To make the app feel snappy:
@@ -58,6 +60,10 @@ I paid special attention to performance:
 - Memoized components to prevent unnecessary re-renders
 - Implemented proper error handling with recovery options
 - Added Web Vitals tracking to monitor performance metrics
+
+<img width="1007" alt="desktop" src="https://github.com/user-attachments/assets/fd7967ea-ed08-4655-846e-2ce05d2ddc6c" />
+<img width="1011" alt="mobile" src="https://github.com/user-attachments/assets/7008e61f-c3ae-4d5e-8385-a8c942a92c4f" />
+
 
 ### Component Structure
 
