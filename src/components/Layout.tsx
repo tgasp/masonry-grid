@@ -10,7 +10,7 @@ export default function Layout() {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <Link to="/" className="text-xl font-bold text-gray-900">
-                  Photo Gallery
+                  Masonry Grid
                 </Link>
               </div>
               <div className="ml-6 flex space-x-8">

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useInView } from "@/hooks/useInView";
 import { PexelsPhoto } from "@/types/pexels";
 
 interface PhotoCardProps {
   photo: PexelsPhoto;
-  innerRef?: (node: HTMLDivElement | null) => void;
 }
 
 const CardWrapper = styled.div`
@@ -20,14 +20,13 @@ const ImageContainer = styled.div<{ $aspectRatio: number; $bgColor: string }>`
   background-color: ${(props) => props.$bgColor};
 `;
 
-const Image = styled.img`
+const Image = styled.img<{ $imageLoaded: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  opacity: ${(props) => (props.$imageLoaded ? 1 : 0)};
 `;
 
 const PhotoInfo = styled.div<{ $isLoaded: boolean }>`
@@ -39,12 +38,11 @@ const PhotoInfo = styled.div<{ $isLoaded: boolean }>`
   color: white;
   padding: 20px 16px 16px;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
   visibility: ${(props) => (props.$isLoaded ? "visible" : "hidden")};
 
   ${CardWrapper}:hover & {
     opacity: 1;
-    transform: translateY(0);
   }
 `;
 
@@ -56,23 +54,23 @@ const Photographer = styled.p`
   margin: 0;
 `;
 
-export default function PhotoCard({ photo, innerRef }: PhotoCardProps) {
+export default function PhotoCard({ photo }: PhotoCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [ref, isInView] = useInView<HTMLDivElement>({ once: true });
   const aspectRatio = photo.width / photo.height;
 
   return (
-    <CardWrapper ref={innerRef}>
+    <CardWrapper ref={ref}>
       <Link to={`/photo/${photo.id}`}>
         <ImageContainer $aspectRatio={aspectRatio} $bgColor={photo.avg_color}>
-          <Image
-            src={photo.src.medium}
-            alt={photo.alt || `Photo by ${photo.photographer}`}
-            onLoad={() => setImageLoaded(true)}
-            style={{
-              opacity: imageLoaded ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
+          {isInView && (
+            <Image
+              src={photo.src.medium}
+              alt={photo.alt || `Photo by ${photo.photographer}`}
+              onLoad={() => setImageLoaded(true)}
+              $imageLoaded={imageLoaded}
+            />
+          )}
 
           <PhotoInfo $isLoaded={imageLoaded}>
             <Photographer>Photo by {photo.photographer}</Photographer>
