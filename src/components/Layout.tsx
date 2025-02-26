@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom'
 
 export default function Layout() {
   return (
-    <div className="w-100 min-h-screen bg-gray-100">
+    <div className="w-100 min-h-screen bg-gray-50">
       {/* Navigation */}
       <header className="bg-white shadow">
         <nav className="px-4 sm:px-6 lg:px-8">
